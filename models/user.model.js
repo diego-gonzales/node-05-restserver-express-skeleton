@@ -32,6 +32,21 @@ const UserSchema = Schema({
     type: Boolean,
     default: false
   }
+}, {
+  versionKey: false
 });
+
+UserSchema.methods.toJSON = function() {
+  const user = this;
+  console.log(this);
+  const userObject = user.toObject();
+
+  delete userObject.password;
+
+  return userObject;
+
+  // const { __v, password, ...restoDePropiedades } = userObject;
+  // return restoDePropiedades;
+}
 
 module.exports = model('User', UserSchema);
