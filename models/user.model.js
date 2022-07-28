@@ -32,8 +32,6 @@ const UserSchema = Schema({
     type: Boolean,
     default: false
   }
-}, {
-  versionKey: false
 });
 
 UserSchema.methods.toJSON = function() {
@@ -42,6 +40,7 @@ UserSchema.methods.toJSON = function() {
   const userObject = user.toObject();
 
   delete userObject.password;
+  delete userObject.__v;
 
   return userObject;
 

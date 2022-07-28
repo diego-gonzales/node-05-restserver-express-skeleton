@@ -1,13 +1,27 @@
 const { Router } = require('express');
-const { check } = require('express-validator');
+const { check, query } = require('express-validator');
 const { getUsers, createUser, updateUser, deleteUser, getUser } = require('../controllers/users.controller');
-const { isValidRole, emailExists } = require('../helpers/db-validators');
+const { isValidRole, emailExists, userExistsByID } = require('../helpers/db-validators');
 const { validateFields } = require('../middlewares/validate-fields');
 
 const router = Router();
 
-router.get('/', getUsers);
+// Version with 'limit' and 'offset'
+// router.get('/', [
+//   query('page_size', 'Page size is invalid').optional().isInt({ min: 1 }).toInt(),
+//   query('offset', 'Offset is invalid').optional().isInt({ min: 0 }).toInt(),
+//   validateFields
+// ], getUsers);
+
+// Version with 'page' and 'page_size'
+router.get('/', [
+  query('page', 'Page is invalid').optional().isInt({ min: 1 }).toInt(),
+  query('page_size', 'Page size is invalid').optional().isInt({ min: 1 }).toInt(),
+  validateFields
+], getUsers);
+
 router.get('/:id', getUser);
+
 router.post('/', [
   check('name', 'Name is required').not().isEmpty(),
   check('email', 'Email invalid').isEmail(),
@@ -18,7 +32,18 @@ router.post('/', [
   check('role').custom(isValidRole),
   validateFields
 ], createUser);
-router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
+
+router.put('/:id', [
+  check('id', 'ID is invalid').isMongoId(),
+  check('id').custom(userExistsByID),
+  check('role').custom(isValidRole),
+  validateFields
+], updateUser);
+
+router.delete('/:id', [
+  check('id', 'ID is invalid').isMongoId(),
+  check('id').custom(userExistsByID),
+  validateFields
+], deleteUser);
 
 module.exports = router;

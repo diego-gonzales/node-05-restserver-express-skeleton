@@ -3,13 +3,38 @@ const bcryptjs = require('bcryptjs');
 
 const User = require('../models/user.model');
 
-const getUsers = (req = request, res = response) => {
-  const { page = '1', page_size = '10' } = req.query;
+// Version with 'limit' and 'offset'
+// const getUsers = async (req = request, res = response) => {
+//   const {  limit = 10, offset = 0 } = req.query;
+//   const users = await User.find()
+//     .skip(offset)
+//     .limit(limit)
+//   res.json({
+//     users
+//   });
+// };
+
+// Version with 'page' and 'page_size'
+const getUsers = async (req = request, res = response) => {
+  const { page = 1, page_size = 10 } = req.query;
+
+  const [users, total] = await Promise.all([
+    User.find({ status: true }).skip((page - 1) * page_size).limit(page_size),
+    User.countDocuments({ status: true })
+  ]);
+
+  const num_pages = Math.ceil(total / page_size);
+  const next = page < num_pages ? `/api/users?page=${page + 1}` : null;
+  const previous = page > 1 ? `/api/users?page=${page - 1}` : null;
 
   res.json({
-    msg: 'get users',
+    total,
     page,
-    page_size
+    num_pages,
+    page_size,
+    next,
+    previous,
+    users
   });
 };
 
@@ -35,31 +60,33 @@ const createUser = async (req = request, res = response) => {
   // Save on DB
   await user.save();
 
-  res.status(201).json({
-    user
-  });
+  res.status(201).json(user);
 };
 
-const updateUser = (req = request, res = response) => {
+const updateUser = async (req = request, res = response) => {
   const userID = req.params.id;
+  const { _id, password, google, email, ...resto } = req.body;
 
-  res.json({
-    msg: 'put user',
-    data: {
-      userID
-    }
-  });
+  if (password) {
+    const salt = bcryptjs.genSaltSync();
+    resto.password = bcryptjs.hashSync(password, salt);
+  }
+
+  const user = await User.findByIdAndUpdate(userID, resto, { new: true }); 
+
+  res.json(user);
 };
 
-const deleteUser = (req = request, res = response) => {
+const deleteUser = async (req = request, res = response) => {
   const userID = req.params.id;
 
-  res.json({
-    msg: 'delete user',
-    data: {
-      userID
-    }
-  });
+  // This code remove the user from the DB
+  // const user = await User.findByIdAndDelete(userID);
+
+  // This code set the user status to false
+  const user = await User.findByIdAndUpdate(userID, { status: false });
+
+  res.json(user);
 }
 
 
