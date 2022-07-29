@@ -79,6 +79,7 @@ const updateUser = async (req = request, res = response) => {
 
 const deleteUser = async (req = request, res = response) => {
   const userID = req.params.id;
+  const userAuthenticated = req.userAuthenticated;
 
   // This code remove the user from the DB
   // const user = await User.findByIdAndDelete(userID);

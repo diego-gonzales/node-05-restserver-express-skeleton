@@ -36,16 +36,19 @@ const UserSchema = Schema({
 
 UserSchema.methods.toJSON = function() {
   const user = this;
-  console.log(this);
   const userObject = user.toObject();
 
-  delete userObject.password;
-  delete userObject.__v;
+  // delete userObject.password;
+  // delete userObject.__v;
 
-  return userObject;
+  // userObject.uid = userObject._id;
+  // delete userObject._id;
 
-  // const { __v, password, ...restoDePropiedades } = userObject;
-  // return restoDePropiedades;
+  // return userObject;
+
+  const { __v, password, _id, ...restoDePropiedades } = userObject;
+  restoDePropiedades.uid = _id;
+  return restoDePropiedades;
 }
 
 module.exports = model('User', UserSchema);
