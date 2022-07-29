@@ -21,6 +21,7 @@ const UserSchema = Schema({
   role: {
     type: String,
     required: [true, 'Role is required'],
+    default: 'USER'
     // This is not necessary because we are using the Role model to validate the role
     // enum: ['USER', 'ADMIN']
   },

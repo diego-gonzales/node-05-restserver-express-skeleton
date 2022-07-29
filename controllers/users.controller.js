@@ -24,8 +24,8 @@ const getUsers = async (req = request, res = response) => {
   ]);
 
   const num_pages = Math.ceil(total / page_size);
-  const next = page < num_pages ? `/api/users?page=${page + 1}` : null;
-  const previous = page > 1 ? `/api/users?page=${page - 1}` : null;
+  const next = page < num_pages ? `/api/users?page=${page + 1}&page_size=${page_size}` : null;
+  const previous = page > 1 ? `/api/users?page=${page - 1}&page_size=${page_size}` : null;
 
   res.json({
     total,

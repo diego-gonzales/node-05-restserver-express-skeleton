@@ -3,6 +3,7 @@ const bcryptjs = require('bcryptjs');
 
 const User = require('../models/user.model');
 const { generateJWT } = require('../helpers/generate-jwt');
+const { googleVerify } = require('../helpers/google-verify');
 
 const login = async (req = request, res = response) => {
   const { email, password } = req.body;
@@ -42,8 +43,53 @@ const login = async (req = request, res = response) => {
       msg: 'Internal server error'
     });
   }
+};
+
+const googleSignIn = async (req = request, res = response) => {
+  const { google_token } = req.body;
+
+  try {
+    const { name, email, picture } = await googleVerify(google_token);
+
+    let user = await User.findOne({ email });
+
+    // If user does not exist, create a new one
+    if (!user) {
+      user = new User({
+        name,
+        email,
+        password: ':PPPPP', // Here we use a password that is not used
+        imageURL: picture,
+        google: true
+      });
+
+      await user.save();
+    }
+
+    // If user is not active, send error. Here also I would can activate the user instead of sending an error
+    if (!user.status) {
+      return res.status(401).json({ msg: 'Blocked user. Please, talk to the administrator' });
+    }
+
+    // Generate JWT
+    const token = await generateJWT(user.id);
+
+    res.json({
+      ok: true,
+      user,
+      access_token: token
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      ok: false,
+      msg: 'Google token is invalid'
+    });
+  }
 }
 
 module.exports = {
-  login
+  login,
+  googleSignIn
 };
