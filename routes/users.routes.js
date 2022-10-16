@@ -16,8 +16,8 @@ const router = Router();
 
 // Version with 'page' and 'page_size'
 router.get('/', [
-  query('page', 'Page is invalid').optional().isInt({ min: 1 }).toInt(),
-  query('page_size', 'Page size is invalid').optional().isInt({ min: 1 }).toInt(),
+  query('page', 'Page invalid').optional().isInt({ min: 1 }).toInt(),
+  query('page_size', 'Page size invalid').optional().isInt({ min: 1 }).toInt(),
   validateFields
 ], getUsers);
 
@@ -35,7 +35,7 @@ router.post('/', [
 ], createUser);
 
 router.put('/:id', [
-  check('id', 'ID is invalid').isMongoId(),
+  check('id', 'ID invalid').isMongoId(),
   check('id').custom(userExistsByID),
   check('role').custom(isValidRole),
   validateFields
@@ -45,7 +45,7 @@ router.delete('/:id', [
   validateJwt,
   // isAdminRole,
   haveRole('VENTAS', 'ADMIN'),
-  check('id', 'ID is invalid').isMongoId(),
+  check('id', 'ID invalid').isMongoId(),
   check('id').custom(userExistsByID),
   validateFields
 ], deleteUser);

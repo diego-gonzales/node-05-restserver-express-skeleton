@@ -7,8 +7,8 @@ const User = require('../models/user.model');
 // const getUsers = async (req = request, res = response) => {
 //   const {  limit = 10, offset = 0 } = req.query;
 //   const users = await User.find()
-//     .skip(offset)
-//     .limit(limit)
+//     .skip(Number(offset))
+//     .limit(Number(limit))
 //   res.json({
 //     users
 //   });
@@ -34,7 +34,7 @@ const getUsers = async (req = request, res = response) => {
     page_size,
     next,
     previous,
-    users
+    results: users
   });
 };
 
@@ -85,9 +85,11 @@ const deleteUser = async (req = request, res = response) => {
   // const user = await User.findByIdAndDelete(userID);
 
   // This code set the user status to false
-  const user = await User.findByIdAndUpdate(userID, { status: false });
+  await User.findByIdAndUpdate(userID, { status: false });
 
-  res.json(user);
+  res.json({
+    msg: 'User has been deleted!'
+  });
 }
 
 
