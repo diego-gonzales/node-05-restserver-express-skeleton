@@ -9,8 +9,9 @@ class Server {
     this.paths = {
       auth: '/api/auth',
       users: '/api/users',
-      categories: '/api/categories'
-    }
+      categories: '/api/categories',
+      products: '/api/products',
+    };
 
     // Connect to database
     this.connectToDatabase();
@@ -41,11 +42,12 @@ class Server {
     this.app.use(this.paths.auth, require('../routes/auth.routes'));
     this.app.use(this.paths.users, require('../routes/users.routes'));
     this.app.use(this.paths.categories, require('../routes/categories.routes'));
+    this.app.use(this.paths.products, require('../routes/products.routes'));
   }
 
   listen() {
     this.app.listen(this.port, () => {
-      console.log('Example app listening on port', process.env.PORT);
+      console.log('App listening on port', process.env.PORT);
     });
   }
 }

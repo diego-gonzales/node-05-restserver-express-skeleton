@@ -1,4 +1,4 @@
-const { Role, User, Category } = require('../models');
+const { Role, User, Category, Product } = require('../models');
 
 const isValidRole = async (value = '') => {
   const roleExists = await Role.findOne({ role: value });
@@ -21,18 +21,32 @@ const userExistsByID = async (value = '') => {
   }
 };
 
-const categoryExistsByName = async (value = '') => {
+const categoryIsNotRegistered = async (value = '') => {
   // Aquí uso el 'toUpperCase()' ya que al guardar una categoría la guardo en mayúsculas
   const categoryExists = await Category.findOne({ name: value.toUpperCase() });
   if (categoryExists) {
-    throw new Error(`Category '${value}' has already been registered.`)
+    throw new Error(`Category '${value}' has already been registered.`);
   }
 };
 
-const categoryExistsByID = async(value = '') => {
+const categoryExistsByID = async (value = '') => {
   const categoryExists = await Category.findById(value);
   if (!categoryExists) {
     throw new Error(`Category '${value}' does not exists.`);
+  }
+};
+
+const productIsNotRegistered = async (value = '') => {
+  const productExists = await Product.findOne({ name: value.toUpperCase() });
+  if (productExists) {
+    throw new Error(`Product '${value}' has already been registered.`);
+  }
+};
+
+const productExistsByID = async (value = '') => {
+  const productExists = await Product.findById(value);
+  if (!productExists) {
+    throw new Error(`Product '${value}' does not exists.`);
   }
 };
 
@@ -40,6 +54,8 @@ module.exports = {
   isValidRole,
   emailExists,
   userExistsByID,
-  categoryExistsByName,
-  categoryExistsByID
+  categoryIsNotRegistered,
+  categoryExistsByID,
+  productIsNotRegistered,
+  productExistsByID,
 };
