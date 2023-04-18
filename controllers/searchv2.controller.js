@@ -1,12 +1,6 @@
 const { request, response } = require('express');
+const { COLLECTIONS } = require('../consts');
 const { ObjectId } = require('mongoose').Types;
-const { User, Category, Product } = require('../models');
-
-const COLLECTIONS = {
-  users: User,
-  categories: Category,
-  products: Product,
-};
 
 const searchv2 = async (req = request, res = response) => {
   const { collection, keyword } = req.params;

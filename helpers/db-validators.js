@@ -50,6 +50,14 @@ const productExistsByID = async (value = '') => {
   }
 };
 
+const validCollections = (collection = '', collections = []) => {
+  const collectionIsIncluded = collections.includes(collection);
+  if (!collectionIsIncluded) {
+    throw new Error(`Collection '${collection}' is not valid.`);
+  }
+  return true;
+};
+
 module.exports = {
   isValidRole,
   emailExists,
@@ -58,4 +66,5 @@ module.exports = {
   categoryExistsByID,
   productIsNotRegistered,
   productExistsByID,
+  validCollections,
 };

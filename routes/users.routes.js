@@ -7,11 +7,7 @@ const {
   deleteUser,
   getUser,
 } = require('../controllers/users.controller');
-const {
-  isValidRole,
-  emailExists,
-  userExistsByID,
-} = require('../helpers/db-validators');
+const { isValidRole, emailExists, userExistsByID } = require('../helpers');
 const {
   validateFields,
   validateJwt,

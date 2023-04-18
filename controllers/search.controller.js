@@ -1,13 +1,7 @@
 const { request, response } = require('express');
 const { ObjectId } = require('mongoose').Types;
 const { User, Category, Product } = require('../models');
-
-const VALID_COLLECTIONS = {
-  USERS: 'users',
-  CATEGORIES: 'categories',
-  PRODUCTS: 'products',
-  ROLES: 'roles',
-};
+const { VALID_COLLECTIONS } = require('../consts');
 
 const search = (req = request, res = response) => {
   const { collection, keyword } = req.params;

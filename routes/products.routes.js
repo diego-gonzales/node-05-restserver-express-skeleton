@@ -12,7 +12,7 @@ const {
   productExistsByID,
   productIsNotRegistered,
   categoryExistsByID,
-} = require('../helpers/db-validators');
+} = require('../helpers');
 
 const router = Router();
 

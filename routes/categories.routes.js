@@ -7,10 +7,7 @@ const {
   updateCategory,
   deleteCategory,
 } = require('../controllers/categories.controller');
-const {
-  categoryExistsByID,
-  categoryIsNotRegistered,
-} = require('../helpers/db-validators');
+const { categoryExistsByID, categoryIsNotRegistered } = require('../helpers');
 
 const { validateJwt, validateFields, isAdminRole } = require('../middlewares');
 
