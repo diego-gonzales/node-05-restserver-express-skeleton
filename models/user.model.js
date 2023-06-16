@@ -16,7 +16,8 @@ const UserSchema = Schema({
     minlength: [6, 'Password must be at least 6 characters']
   },
   imageURL: {
-    type: String
+    type: String,
+    default: null // Se coloca un valor por defecto para que se muestre en el JSON de respuesta, de lo contrario no se mostraría
   },
   role: {
     type: String,

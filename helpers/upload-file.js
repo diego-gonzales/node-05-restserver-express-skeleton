@@ -21,9 +21,9 @@ const uploadMyFile = (
 
     const uploadPath = path.join(__dirname, '../uploads/', folder, newFileName);
 
+    // mv is a method from the myFile object (Thanks to the express-fileupload package)
     myFile.mv(uploadPath, (err) => {
       if (err) reject(err);
-
       resolve(newFileName);
     });
   });

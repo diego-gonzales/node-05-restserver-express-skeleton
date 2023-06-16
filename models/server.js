@@ -45,7 +45,7 @@ class Server {
       fileUpload({
         useTempFiles: true,
         tempFileDir: '/tmp/',
-        createParentPath: true,
+        createParentPath: true, // <--- Allows to create the folder if it doesn't exist
       })
     );
   }

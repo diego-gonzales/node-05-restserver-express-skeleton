@@ -4,13 +4,12 @@ const {
   updateCollectionImage,
 } = require('../controllers/uploads.controller');
 const { param } = require('express-validator');
-const { validCollections } = require('../helpers');
-const { validateFields } = require('../middlewares');
+const { validateFields, validateFile } = require('../middlewares');
 const { VALID_COLLECTIONS_TO_UPLOAD_FILE } = require('../consts');
 
 const router = Router();
 
-router.post('/', uploadFile);
+router.post('/', validateFile, uploadFile);
 
 router.put(
   '/:collection/:id',
@@ -20,6 +19,7 @@ router.put(
       VALID_COLLECTIONS_TO_UPLOAD_FILE
     ),
     validateFields,
+    validateFile,
   ],
   updateCollectionImage
 );

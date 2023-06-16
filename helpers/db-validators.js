@@ -50,6 +50,7 @@ const productExistsByID = async (value = '') => {
   }
 };
 
+// Ya no se usa porque se usa el 'isIn()' de 'express-validator'
 const validCollections = (collection = '', collections = []) => {
   const collectionIsIncluded = collections.includes(collection);
   if (!collectionIsIncluded) {
